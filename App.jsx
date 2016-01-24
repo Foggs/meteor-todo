@@ -1,15 +1,20 @@
 // App component - represents the whole app
 App = React.createClass({
-  getTasks() {
-    return [
-      { _id: 1, text: "This is task 1" },
-      { _id: 2, text: "This is task 2" },
-      { _id: 3, text: "This is task 3" }
-    ];
+  
+  // This mixin makes the getMeteorData method work
+  //  use data from a Meteor collection inside a React component
+  mixins: [ReactMeteorData],
+
+  // { _id: 1, text: "Move Tasks collection to 'both' directory" },
+  getMeteorData() {
+    return {
+      tasks: Tasks.find({}).fetch()
+    }
   },
- 
+
+  // Loads items from the Tasks collection and puts them on this.data.tasks
   renderTasks() {
-    return this.getTasks().map((task) => {
+    return this.data.tasks.map((task) => {
       return <Task key={task._id} task={task} />;
     });
   },
