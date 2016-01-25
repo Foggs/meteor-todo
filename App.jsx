@@ -1,3 +1,10 @@
+/*
+  $ deploy meteor deploy foggo_todo.meteor.com
+  Deploying to foggo_todo.meteor.com.
+  Now serving at http://foggo_todo.meteor.com
+  You can set a password on your account or change your email address at: https://www.meteor.com/setPassword?xbueAyZEpS
+ */
+
 // App component - represents the whole app
 App = React.createClass({
   
@@ -5,10 +12,33 @@ App = React.createClass({
   //  use data from a Meteor collection inside a React component
   mixins: [ReactMeteorData],
 
-  // using the createdAt field added by our new code sort the TODO list to place newer items on top
-  getMeteorData() {
+  getInitialState() {
     return {
-      tasks: Tasks.find({}, {sort: {createdAt: -1}}).fetch()
+      hideCompleted: false
+    }
+  },
+
+  toggleHideCompleted() {
+    console.log('toggleHideCompleted')
+    this.setState({
+      hideCompleted: ! this.state.hideCompleted
+    });
+  },
+
+  
+  getMeteorData() {
+    let query = {};
+ 
+    if (this.state.hideCompleted) {
+      // If hide completed is checked, filter tasks
+      query = {checked: {$ne: true}};
+    }
+
+    return {
+      // using the createdAt field added by our new code sort the TODO list to place newer items on top
+      tasks: Tasks.find(query, {sort: {createdAt: -1}}).fetch(),
+      // display a count of the tasks that haven't been checked off
+      incompleteCount: Tasks.find({checked: {$ne: true}}).count()
       //tasks: Tasks.find({}).fetch()
     }
   },
@@ -29,6 +59,8 @@ App = React.createClass({
     React.findDOMNode(this.refs.textInput).value = "";
   },
 
+  
+
   // Loads items from the Tasks collection and puts them on this.data.tasks
   renderTasks() {
     return this.data.tasks.map((task) => {
@@ -40,7 +72,17 @@ App = React.createClass({
     return (
       <div className="container">
         <header>
-          <h1>Todo List</h1>
+          <h1>Todo List ({this.data.incompleteCount})</h1>
+          {/*client-side data filtering feature to our app, so that users can check a box to only see incomplete tasks*/}
+          <label className="hide-completed">
+            <input
+              type="checkbox"
+              readOnly={true}
+              checked={this.state.hideCompleted}
+              onClick={this.toggleHideCompleted} />
+            Hide Completed Tasks
+          </label>
+
           {/* onSubmit attribute that references a method on the component called handleSubmit. In React, this is how you listen to browser events, like the submit event on the form. The input element has a ref property which will let us easily access this element later.
            */}
           <form className="new-task" onSubmit={this.handleSubmit} >
