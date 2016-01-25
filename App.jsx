@@ -49,6 +49,8 @@ App = React.createClass({
     // Find the text field via the React ref
     var text = ReactDOM.findDOMNode(this.refs.textInput).value.trim();
 
+    Meteor.call("addTask", text);
+    
     // we are adding a task to the tasks collection by calling Tasks.insert().
     /*
     Only display the new task input field to logged in users Show which user created each tasks To do this, we will add two new fields to the tasks collection:
