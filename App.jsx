@@ -1,5 +1,5 @@
 /*
-  $ deploy meteor deploy foggo_todo.meteor.com
+  $ deploy>> meteor deploy foggo_todo.meteor.com
   Deploying to foggo_todo.meteor.com.
   Now serving at http://foggo_todo.meteor.com
   You can set a password on your account or change your email address at: https://www.meteor.com/setPassword?xbueAyZEpS
@@ -50,7 +50,7 @@ App = React.createClass({
     var text = ReactDOM.findDOMNode(this.refs.textInput).value.trim();
 
     Meteor.call("addTask", text);
-    
+
     // we are adding a task to the tasks collection by calling Tasks.insert().
     /*
     Only display the new task input field to logged in users Show which user created each tasks To do this, we will add two new fields to the tasks collection:
@@ -71,8 +71,15 @@ App = React.createClass({
 
   // Loads items from the Tasks collection and puts them on this.data.tasks
   renderTasks() {
+    // Get tasks from this.data.tasks
     return this.data.tasks.map((task) => {
-      return <Task key={task._id} task={task} />;
+      const currentUserId = this.data.currentUser && this.data.currentUser._id;
+      const showPrivateButton = task.owner === currentUserId;
+ 
+      return <Task
+        key={task._id}
+        task={task}
+        showPrivateButton={showPrivateButton} />;
     });
   },
  

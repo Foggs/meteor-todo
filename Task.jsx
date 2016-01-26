@@ -8,7 +8,12 @@ Task = React.createClass({
   },
 
   /*
-    The update function on a collection takes two arguments. The first is a selector that identifies a subset of the collection, and the second is an update parameter that specifies what should be done to the matched objects.In this case, the selector is just the _id of the relevant task. The update parameter uses $set to toggle the checked field, which will represent whether the task has been completed.
+    The update function on a collection takes two arguments. 
+    The first is a selector that identifies a subset of the collection, 
+    and the second is an update parameter that specifies what should be 
+    done to the matched objects.In this case, the selector is just the _id 
+    of the relevant task. The update parameter uses $set to toggle the checked 
+    field, which will represent whether the task has been completed.
   */
   toggleChecked() {
     // Set the checked property to the opposite of its current value
@@ -21,6 +26,7 @@ Task = React.createClass({
   deleteThisTask() {
     Meteor.call("removeTask", this.props.task._id);
   },
+
 
   togglePrivate() {
     Meteor.call("setPrivate", this.props.task._id, ! this.props.task.private);
@@ -44,11 +50,11 @@ Task = React.createClass({
           checked={this.props.task.checked}
           onClick={this.toggleChecked} />
 
-        { this.props.showPrivateButton ? (
+          { this.props.showPrivateButton ? (
           <button className="toggle-private" onClick={this.togglePrivate}>
             { this.props.task.private ? "Private" : "Public" }
           </button>
-        ) : ''}  
+          ) : ''}
  
         <span className="text">
           <strong>{this.props.task.username}</strong>: {this.props.task.text}
