@@ -102,9 +102,13 @@ App = React.createClass({
  
 
           
-          {/* onSubmit attribute that references a method on the component called handleSubmit. In React, this is how you listen to browser events, like the submit event on the form. The input element has a ref property which will let us easily access this element later.
-
-          Add a conditional statement to only show the form when there is a logged in user
+          {/* onSubmit attribute that references a method on the component 
+          called handleSubmit. In React, this is how you listen to browser 
+          events, like the submit event on the form. 
+          The input element has a ref property which will let us easily 
+          access this element later.
+          Add a conditional statement to only show the form when there is 
+          a logged in user
            */}
           { this.data.currentUser ?
             <form className="new-task" onSubmit={this.handleSubmit} >
